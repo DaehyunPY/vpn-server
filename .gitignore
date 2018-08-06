@@ -1,0 +1,5 @@
+*.key
+*.pub
+*.csr
+*.srl
+*.crt
