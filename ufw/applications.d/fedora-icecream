@@ -1,0 +1,4 @@
+[Icecream]
+title=Icecream
+description=Distributed compiler with a central scheduler to share build load
+ports=10245,8765,8766/tcp|8765/udp

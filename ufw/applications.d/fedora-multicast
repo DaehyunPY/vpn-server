@@ -1,0 +1,9 @@
+[mDNS]
+title=mDNS
+description=Multicast DNS (mDNS)
+ports=5353/udp
+
+[UPnP]
+title=UPnP
+description=Universal Plug and Play (UPnP)
+ports=1900/udp

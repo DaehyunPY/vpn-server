@@ -1,0 +1,4 @@
+[KDE Connect]
+title=KDE Connect
+description=KDE Connect allows intercommunicating with mobile devices to receive messages and notifications
+ports=1714:1764/tcp|1714:1764/udp
