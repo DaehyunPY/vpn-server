@@ -1,4 +1,4 @@
 #!/bin/bash
-# ufw enable
+ufw enable
 strongswan start --nofork
-# ufw disable
+ufw disable
