@@ -1,0 +1,13 @@
+version: '3'
+services:
+  vpn-server:
+    image: daehyunpy/vpn-server
+    ports:
+      - "500:500/udp"
+      - "4500:4500/udp"
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    volumes:
+      - "./strongswan:/etc/strongswan:Z"
+      - "./ufw:/etc/ufw:Z"
