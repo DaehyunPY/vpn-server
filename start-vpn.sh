@@ -1,8 +1,5 @@
 #!/bin/bash
-ufw allow 500,4500/udp
-ufw enable
-
-strongswan start --nofork &
+ipsec start --nofork &
 pid=$!
 sleep 1
 
@@ -14,6 +11,3 @@ then
     swanctl --load-conns
     wait $pid
 fi
-
-ufw disable
-ufw reject 500,4500/udp
