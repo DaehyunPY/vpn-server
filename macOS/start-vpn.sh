@@ -1,4 +1,6 @@
 #!/bin/bash
+pfctl -ef /etc/pf.conf
+
 ipsec start --nofork &
 pid=$!
 sleep 1
@@ -9,3 +11,5 @@ then
     swanctl --load-all
     wait $pid
 fi
+
+pfctl -d
