@@ -1,13 +1,40 @@
-version: '3'
+version: '2.1'
 services:
   vpn-server:
     image: daehyunpy/vpn-server
+    build: ./docker
     ports:
-      - "500:500/udp"
-      - "4500:4500/udp"
+      - 500:500/udp
+      - 4500:4500/udp
     cap_add:
       - NET_ADMIN
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.accept_redirects=0
+      - net.ipv4.conf.all.send_redirects=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.accept_redirects=0
+    networks:
+      vpn-network:
+        ipv4_address: 172.235.75.2
+        ipv6_address: fd3f:b356:c123:eb4b::2
     restart: unless-stopped
-    volumes:
-      - "./strongswan:/etc/strongswan:Z"
-      - "./ufw:/etc/ufw:Z"
+    environment:
+      LOCAL_ID:
+      LOCAL_TS:
+      SECRET:  # Generate one with: openssl rand -base64 24
+      POOL_IPV4:
+      POOL_IPV6:
+      DNS_IPV4: 1.1.1.1, 1.0.0.1
+      DNS_IPV6: 2606:4700:4700::1111, 2606:4700:4700::1001
+networks:
+  vpn-network:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.235.75.0/24
+          gateway: 172.235.75.1
+        - subnet: fd3f:b356:c123:eb4b::/120
+          gateway: fd3f:b356:c123:eb4b::1
