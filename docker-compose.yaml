@@ -3,9 +3,9 @@ services:
   vpn-server:
     image: daehyunpy/vpn-server
     build: ./docker
-    ports:
-      - 500:500/udp
-      - 4500:4500/udp
+    links:
+      - dns-server
+    restart: unless-stopped
     cap_add:
       - NET_ADMIN
     sysctls:
@@ -14,19 +14,34 @@ services:
       - net.ipv4.conf.all.send_redirects=0
       - net.ipv6.conf.all.forwarding=1
       - net.ipv6.conf.all.accept_redirects=0
+    ports:
+      - 500:500/udp
+      - 4500:4500/udp
     networks:
       vpn-network:
         ipv4_address: 172.235.75.2
         ipv6_address: fd3f:b356:c123:eb4b::2
-    restart: unless-stopped
     environment:
       LOCAL_ID:
       LOCAL_TS:
       SECRET:  # Generate one with: openssl rand -base64 24
       POOL_IPV4:
       POOL_IPV6:
-      DNS_IPV4: 1.1.1.1, 1.0.0.1
-      DNS_IPV6: 2606:4700:4700::1111, 2606:4700:4700::1001
+      DNS_IPV4: 172.235.75.3, 1.1.1.1, 1.0.0.1
+      DNS_IPV6: fd3f:b356:c123:eb4b::3, 2606:4700:4700::1111, 2606:4700:4700::1001
+  dns-server:
+    image: cznic/knot
+    command: knotd
+    restart: unless-stopped
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+    networks:
+      vpn-network:
+        ipv4_address: 172.235.75.3
+        ipv6_address: fd3f:b356:c123:eb4b::3
+    volumes:
+      - ./knot:/etc/knot
 networks:
   vpn-network:
     driver: bridge

@@ -1,1 +1,2 @@
-*.pem
+/knot
+/docker-compose.prod.yaml
